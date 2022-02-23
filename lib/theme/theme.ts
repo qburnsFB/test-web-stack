@@ -1,7 +1,7 @@
 // Using a theme here is definitely overkill, but in a real project there would likely be a lot more requirements to adhere to
 // With a bit more time, it'd make sense to split these out into a constants file so we can reliably use them in the app w/o mistypes
 
-const customTheme = {
+export const theme = {
   fonts: {
     body: `'Source Sans Pro', sans-serif;`,
   },
@@ -23,5 +23,3 @@ const customTheme = {
     lowest: 1000,
   },
 };
-
-export default customTheme;

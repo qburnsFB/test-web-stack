@@ -3,6 +3,7 @@ import Head from "next/head";
 import { useContext } from "react";
 import { ModalComponent, Button, Heading } from "@components/Common";
 import { ModalContext } from "@lib/helpers";
+import {Avatar} from "@components/Common/Avatar/Avatar";
 
 const blockStyle = {
   background: "#ddd",
@@ -12,7 +13,7 @@ const blockStyle = {
   padding: "2rem",
 };
 
-const KitchenSink: NextPage = () => {
+export const KitchenSink: NextPage = () => {
   const { toggleVisible } = useContext(ModalContext);
   return (
     <>
@@ -29,34 +30,32 @@ const KitchenSink: NextPage = () => {
         }}
       >
         <section className="TextStyles" css={blockStyle}>
-          <Heading size="large" key="textStyles">
+          <Heading size="large">
             Text Styles:
           </Heading>
-          <Heading size="larger" as="h1" key="h1">
+          <Heading size="larger" as="h1">
             H1 Source Sans Pro Light 48px
           </Heading>
-          <Heading size="large" as="h2" key="h2">
+          <Heading size="large" as="h2">
             H2 Header Source Sans Pro Semibold 21px
           </Heading>
           <p>Paragraph Source Sans Pro Light 16px</p>
         </section>
 
         <section className="ButtonStyles" css={blockStyle}>
-          <Heading size="large" key="btnStyles">
+          <Heading size="large">
             Button Styles:
           </Heading>
-          <Button key="primaryBtn">Primary Button</Button>
+          <Button>Primary Button</Button>
           <Button
-            key="secondaryBtn"
             variant="secondary"
             css={{
-              marginLeft: "2rem",
+              margin: "0 2rem",
             }}
           >
             Secondary Button
           </Button>
           <Button
-            key="disabledBtn"
             disabled
             css={{
               marginTop: "2rem",
@@ -67,7 +66,7 @@ const KitchenSink: NextPage = () => {
         </section>
 
         <section className="InputStyles" css={blockStyle}>
-          <Heading size="large" key="inputStylesKey">
+          <Heading size="large">
             Input Styles:
           </Heading>
           <input placeholder="Placeholder" />
@@ -77,7 +76,7 @@ const KitchenSink: NextPage = () => {
             }}
           >
             <label htmlFor="test">Test</label>
-            <input id="test" value="Value with label" readOnly />
+            <input id="test" value="Readonly value with label" readOnly />
           </div>
         </section>
 
@@ -88,19 +87,23 @@ const KitchenSink: NextPage = () => {
             escape key or clicking outside of it.
           </ModalComponent>
           <Button
-            key="modalKey"
-            variant="secondary"
-            css={{
-              marginLeft: "2rem",
-            }}
-            onClick={toggleVisible}
+              variant="secondary"
+              css={{
+                marginLeft: "2rem",
+              }}
+              onClick={toggleVisible}
           >
             Open Modal
           </Button>
+        </section>
+
+
+
+        <section className="ModalStyles" css={blockStyle}>
+          <Heading size="large">Card Styles:</Heading>
+          <Avatar src="https://source.unsplash.com/random/200x200/?person" alt="Random Person" />
         </section>
       </main>
     </>
   );
 };
-
-export default KitchenSink;

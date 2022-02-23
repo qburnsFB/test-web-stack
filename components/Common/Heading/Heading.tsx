@@ -4,7 +4,7 @@ import { Interpolation, Theme, useTheme } from "@emotion/react";
 
 type HeadingProps = {
   size?: string;
-  as?: any;
+  as?: keyof JSX.IntrinsicElements;
   css?: Interpolation<Theme>;
   children: JSX.Element | string;
 };
@@ -25,8 +25,8 @@ export const Heading = forwardRef<HTMLDivElement, HeadingProps>(
     };
 
     const StyledHeader = styled("div")<HeadingProps>`
-      ${() => size === "h1" && h1SizeStyle}
-      ${() => size === "h2" && h2SizeStyle}
+      ${() => size === "larger" && h1SizeStyle}
+      ${() => size === "large" && h2SizeStyle}
     `;
     return (
       <StyledHeader size={size} as={as} ref={ref} {...rest}>

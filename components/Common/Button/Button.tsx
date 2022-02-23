@@ -1,20 +1,21 @@
 import { forwardRef, MouseEventHandler } from "react";
-import styled from "@emotion/styled";
+import styled  from "@emotion/styled";
 import { motion } from "framer-motion";
-import { useTheme, css, Interpolation, Theme } from "@emotion/react";
+import { useTheme, css, Interpolation, Theme,  } from "@emotion/react";
 
 type ButtonProps = {
   variant?: string;
   onClick?: MouseEventHandler | undefined;
   disabled?: boolean;
   loading?: boolean;
+  as?: keyof JSX.IntrinsicElements;
   css?: Interpolation<Theme>;
   children: JSX.Element | string;
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { variant, disabled, loading, onClick, children, ...rest }: ButtonProps,
+    { variant, disabled, loading, onClick, as, children, ...rest }: ButtonProps,
     ref
   ): JSX.Element => {
     const theme = useTheme();
@@ -86,7 +87,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         whileHover="hover"
         whileTap="tap"
       >
-        <StyledButton disabled={disabled} onClick={onClick} ref={ref} {...rest}>
+        <StyledButton disabled={disabled} onClick={onClick} as={as} ref={ref} {...rest}>
           {loading ? <p>Loading</p> : children}
         </StyledButton>
       </motion.div>
