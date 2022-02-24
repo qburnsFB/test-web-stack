@@ -4,8 +4,8 @@ import styled from "@emotion/styled";
 type AvatarProps = {
   src: string;
   alt: string;
-  width: string;
-  height: string;
+  width?: string;
+  height?: string;
   as?: keyof JSX.IntrinsicElements;
 };
 

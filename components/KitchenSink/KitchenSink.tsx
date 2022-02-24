@@ -1,10 +1,8 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useContext } from "react";
-import { ModalComponent, Button, Heading } from "@components/Common";
-import { ModalContext } from "@lib/helpers";
-import {Avatar} from "@components/Common/Avatar/Avatar";
-
+import { Button, Heading, Avatar, UserCard } from "@components/Common";
+import { ModalContext } from "@lib/hooks/useSetupModal";
 const blockStyle = {
   background: "#ddd",
   width: "80%",
@@ -14,7 +12,7 @@ const blockStyle = {
 };
 
 export const KitchenSink: NextPage = () => {
-  const { toggleVisible } = useContext(ModalContext);
+  const { handleShowModal, handleCloseModal } = useContext(ModalContext);
   return (
     <>
       <Head>
@@ -30,9 +28,7 @@ export const KitchenSink: NextPage = () => {
         }}
       >
         <section className="TextStyles" css={blockStyle}>
-          <Heading size="large">
-            Text Styles:
-          </Heading>
+          <Heading size="large">Text Styles:</Heading>
           <Heading size="larger" as="h1">
             H1 Source Sans Pro Light 48px
           </Heading>
@@ -43,9 +39,7 @@ export const KitchenSink: NextPage = () => {
         </section>
 
         <section className="ButtonStyles" css={blockStyle}>
-          <Heading size="large">
-            Button Styles:
-          </Heading>
+          <Heading size="large">Button Styles:</Heading>
           <Button>Primary Button</Button>
           <Button
             variant="secondary"
@@ -66,9 +60,7 @@ export const KitchenSink: NextPage = () => {
         </section>
 
         <section className="InputStyles" css={blockStyle}>
-          <Heading size="large">
-            Input Styles:
-          </Heading>
+          <Heading size="large">Input Styles:</Heading>
           <input placeholder="Placeholder" />
           <div
             css={{
@@ -82,26 +74,35 @@ export const KitchenSink: NextPage = () => {
 
         <section className="ModalStyles" css={blockStyle}>
           <Heading size="large">Modal Styles:</Heading>
-          <ModalComponent closable>
-            This is a super cool, closable modal. You can close with either
-            escape key or clicking outside of it.
-          </ModalComponent>
           <Button
-              variant="secondary"
-              css={{
-                marginLeft: "2rem",
-              }}
-              onClick={toggleVisible}
+            variant="secondary"
+            css={{
+              marginLeft: "2rem",
+            }}
+            onClick={handleShowModal ? () => handleShowModal(<div>This modal gets it's content set dynamically via context</div>) : undefined}
           >
             Open Modal
           </Button>
         </section>
 
-
-
         <section className="ModalStyles" css={blockStyle}>
           <Heading size="large">Card Styles:</Heading>
-          <Avatar src="https://source.unsplash.com/random/200x200/?person" alt="Random Person" />
+          <Avatar
+            src="https://source.unsplash.com/random/200x200/?person"
+            alt="Random Person"
+          />
+          <UserCard
+            css={{
+              marginTop: "2rem",
+            }}
+            user={{
+              id: "testUser",
+              name: "Test User",
+              address: "123 Fake St",
+            }}
+          >
+            Test
+          </UserCard>
         </section>
       </main>
     </>

@@ -1,1 +1,2 @@
-export * from "./useKeyPress";
+export * from "./useKeyPress.ts";
+export * from "./useSetupModal.ts";

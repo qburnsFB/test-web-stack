@@ -1,7 +1,6 @@
 import { css } from "@emotion/react";
 import { useEffect, useContext } from "react";
-import { useKeyPress } from "@lib/hooks";
-import { ModalContext } from "@lib/helpers";
+import { ModalContext } from "@lib/hooks";
 
 const backdropStyles = css({
   backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -43,34 +42,18 @@ const modalVisibleStyles = css({
   zIndex: "5000",
 });
 
-type ModalType = {
-  children: JSX.Element | string;
-  closable?: boolean;
-};
-
 export const ModalComponent = ({
   children,
   closable = false,
-  ...props
+  ...rest
 }: ModalType): JSX.Element => {
-  const escapePressed: boolean = useKeyPress("Escape");
-  const { visible, toggleVisible } = useContext(ModalContext);
-
-  // Handle escape button
-  useEffect(() => {
-    if (closable && escapePressed && visible && toggleVisible) {
-      console.log("escaaaape");
-      // @ts-ignore
-      return toggleVisible();
-    }
-  }, [escapePressed, visible, toggleVisible]);
-
+  const { visible, handleCloseModal } = useContext(ModalContext);
   return (
     <>
       <div
         role="presentation"
         css={[backdropStyles, visible && backdropVisibleStyles]}
-        onClick={closable ? toggleVisible : undefined}
+        onClick={closable ? handleCloseModal : undefined}
       />
       <div
         className="ModalComponent"
