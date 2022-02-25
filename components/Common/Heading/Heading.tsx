@@ -6,6 +6,7 @@ type HeadingProps = {
   size?: string;
   as?: keyof JSX.IntrinsicElements;
   css?: Interpolation<Theme>;
+  className?: string;
   children: JSX.Element | string;
 };
 
@@ -16,6 +17,7 @@ export const Heading = forwardRef<HTMLDivElement, HeadingProps>(
   ): JSX.Element => {
     const theme = useTheme();
     const h1SizeStyle = {
+      fontWeight: 300,
       fontFamily: theme.fonts.body,
       fontSize: theme.headerSizes.larger,
     };
@@ -24,14 +26,14 @@ export const Heading = forwardRef<HTMLDivElement, HeadingProps>(
       fontSize: theme.headerSizes.large,
     };
 
-    const StyledHeader = styled("div")<HeadingProps>`
+    const StyledHeading = styled("div")<HeadingProps>`
       ${() => size === "larger" && h1SizeStyle}
       ${() => size === "large" && h2SizeStyle}
     `;
     return (
-      <StyledHeader size={size} as={as} ref={ref} {...rest}>
+      <StyledHeading className="Heading" size={size} as={as} ref={ref} {...rest}>
         {children}
-      </StyledHeader>
+      </StyledHeading>
     );
   }
 );

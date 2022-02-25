@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import {theme} from "./theme";
+import { theme } from "./theme";
 
 export const global = css`
   * {
@@ -13,11 +13,11 @@ export const global = css`
   body {
     margin: 0;
     padding: 0;
+    background: #f8f8f8;
     overflow-x: hidden;
     min-width: 320px;
     font-family: ${theme.fonts.body};
     min-height: 100%;
-    height: 100%;
   }
 
   #__next {
@@ -50,33 +50,43 @@ export const global = css`
 
   p {
     font-size: ${theme.fontSizes.default};
+    font-weight: 300;
     line-height: 1.25rem;
   }
 
   label {
     font-weight: 600;
     line-height: 1.438rem;
-    font-size: 1.125rem;
+    font-size: 1rem;
 
-  + input {
+    + input,
+    + textarea {
       display: block;
       margin-top: 0.5rem;
     }
   }
-  input {
-    padding-left: 13.5px;
+
+  input,
+  textarea {
+    padding-left: 0.844rem;
     font-family: ${theme.fonts.body};
     border: 1px solid rgba(0, 0, 0, 0.1);
     min-width: 400px;
     height: 64px;
     background: #fff;
     border-radius: 8px;
-    font-size: ${theme.fonts.large}
+    font-size: 1.5rem;
     font-weight: 400;
+  }
+
+  textarea {
+    padding-top: 1rem;
   }
 
   input::placeholder {
     font-family: ${theme.fonts.body};
+    font-size: 1.5rem;
+    line-height: 1.875rem;
     font-weight: 300;
   }
 

@@ -1,8 +1,11 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useContext } from "react";
-import { Button, Heading, Avatar, UserCard } from "@components/Common";
-import { ModalContext } from "@lib/hooks/useSetupModal";
+import { Button, Heading, Avatar, Modal } from "@components/Common";
+import { UserCard } from "@components/Home/UserCard";
+import { useState } from "react";
+import { useModal } from "@lib/hooks/useModal";
+
 const blockStyle = {
   background: "#ddd",
   width: "80%",
@@ -12,7 +15,8 @@ const blockStyle = {
 };
 
 export const KitchenSink: NextPage = () => {
-  const { handleShowModal, handleCloseModal } = useContext(ModalContext);
+  // @ts-ignore
+  const { visible, handleToggleModal } = useModal();
   return (
     <>
       <Head>
@@ -79,10 +83,16 @@ export const KitchenSink: NextPage = () => {
             css={{
               marginLeft: "2rem",
             }}
-            onClick={handleShowModal ? () => handleShowModal(<div>This modal gets it's content set dynamically via context</div>) : undefined}
+            onClick={handleToggleModal}
           >
             Open Modal
           </Button>
+          <Modal closable toggleModal={handleToggleModal} visible={visible}>
+            <div>
+              <Heading size="large">Super cool heading</Heading>
+              <p>Super cool Modal</p>
+            </div>
+          </Modal>
         </section>
 
         <section className="ModalStyles" css={blockStyle}>
@@ -96,13 +106,13 @@ export const KitchenSink: NextPage = () => {
               marginTop: "2rem",
             }}
             user={{
-              id: "testUser",
-              name: "Test User",
-              address: "123 Fake St",
+              id: "1",
+              name: "Tim Jones",
+              dob: "1957-10-10",
+              address: "1015 Timber Ridge Trail, 40223",
+              description: "Random user description, this is a fun one",
             }}
-          >
-            Test
-          </UserCard>
+          />
         </section>
       </main>
     </>

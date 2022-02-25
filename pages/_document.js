@@ -10,10 +10,13 @@ class CustomDocument extends Document {
                             <link
                                 href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;600&display=swap"
                                 rel="stylesheet" />
+                    <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+
                 </Head>
                 <body>
                 <Main />
                 <NextScript />
+                <div id="modal"/>
                 </body>
             </Html>
         )

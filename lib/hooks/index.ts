@@ -1,2 +1,4 @@
-export * from "./useKeyPress.ts";
-export * from "./useSetupModal.ts";
+export * from "./useKeyPress";
+export * from './useDebounce';
+export * from './useSearch';
+export * from './useModal';

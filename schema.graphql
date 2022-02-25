@@ -1,309 +1,122 @@
-directive @cacheControl(
-  maxAge: Int
-  scope: CacheControlScope
-) on FIELD_DEFINITION | OBJECT | INTERFACE
-type Address {
-  street: String
-  suite: String
-  city: String
-  zipcode: String
-  geo: Geo
-}
+directive @external on FIELD_DEFINITION
 
-input AddressInput {
-  street: String
-  suite: String
-  city: String
-  zipcode: String
-  geo: GeoInput
-}
+directive @requires(fields: _FieldSet!) on FIELD_DEFINITION
 
-type Album {
-  id: ID
-  title: String
-  user: User
-  photos(options: PageQueryOptions): PhotosPage
-}
+directive @provides(fields: _FieldSet!) on FIELD_DEFINITION
 
-type AlbumsPage {
-  data: [Album]
-  links: PaginationLinks
-  meta: PageMetadata
-}
+directive @key(fields: _FieldSet!) on OBJECT | INTERFACE
 
-enum CacheControlScope {
-  PUBLIC
-  PRIVATE
-}
+directive @extends on OBJECT | INTERFACE
 
-type Comment {
-  id: ID
-  name: String
-  email: String
-  body: String
-  post: Post
-}
+scalar _Any
 
-type CommentsPage {
-  data: [Comment]
-  links: PaginationLinks
-  meta: PageMetadata
-}
+union _Entity = User
 
-type Company {
-  name: String
-  catchPhrase: String
-  bs: String
-}
+scalar _FieldSet
 
-input CompanyInput {
-  name: String
-  catchPhrase: String
-  bs: String
-}
-
-input CreateAlbumInput {
-  title: String!
-  userId: ID!
-}
-
-input CreateCommentInput {
-  name: String!
-  email: String!
-  body: String!
-}
-
-input CreatePhotoInput {
-  title: String!
-  url: String!
-  thumbnailUrl: String!
-}
-
-input CreatePostInput {
-  title: String!
-  body: String!
-}
-
-input CreateTodoInput {
-  title: String!
-  completed: Boolean!
+type _Service {
+  sdl: String
 }
 
 input CreateUserInput {
   name: String!
-  username: String!
-  email: String!
-  address: AddressInput
-  phone: String
-  website: String
-  company: CompanyInput
+  dob: String!
+  address: String!
+  description: String!
 }
 
-type Geo {
-  lat: Float
-  lng: Float
-}
+"""
+The `DateTime` scalar represents a date and time following the ISO 8601 standard
+"""
+scalar DateTime
 
-input GeoInput {
-  lat: Float
-  lng: Float
+enum MathOptions {
+  ROUND
+  FLOOR
+  CEIL
 }
 
 type Mutation {
-  _: Int
-  createAlbum(input: CreateAlbumInput!): Album
-  updateAlbum(id: ID!, input: UpdateAlbumInput!): Album
-  deleteAlbum(id: ID!): Boolean
-  createComment(input: CreateCommentInput!): Comment
-  updateComment(id: ID!, input: UpdateCommentInput!): Comment
-  deleteComment(id: ID!): Boolean
-  createPhoto(input: CreatePhotoInput!): Photo
-  updatePhoto(id: ID!, input: UpdatePhotoInput!): Photo
-  deletePhoto(id: ID!): Boolean
-  createPost(input: CreatePostInput!): Post
-  updatePost(id: ID!, input: UpdatePostInput!): Post
-  deletePost(id: ID!): Boolean
-  createTodo(input: CreateTodoInput!): Todo
-  updateTodo(id: ID!, input: UpdateTodoInput!): Todo
-  deleteTodo(id: ID!): Boolean
-  createUser(input: CreateUserInput!): User
-  updateUser(id: ID!, input: UpdateUserInput!): User
-  deleteUser(id: ID!): Boolean
-}
-
-enum OperatorKindEnum {
-  GTE
-  LTE
-  NE
-  LIKE
-}
-
-input OperatorOptions {
-  kind: OperatorKindEnum
-  field: String
-  value: String
-}
-
-type PageLimitPair {
-  page: Int
-  limit: Int
-}
-
-type PageMetadata {
-  totalCount: Int
-}
-
-input PageQueryOptions {
-  paginate: PaginateOptions
-  slice: SliceOptions
-  sort: [SortOptions]
-  operators: [OperatorOptions]
-  search: SearchOptions
-}
-
-input PaginateOptions {
-  page: Int
-  limit: Int
-}
-
-type PaginationLinks {
-  first: PageLimitPair
-  prev: PageLimitPair
-  next: PageLimitPair
-  last: PageLimitPair
-}
-
-type Photo {
-  id: ID
-  title: String
-  url: String
-  thumbnailUrl: String
-  album: Album
-}
-
-type PhotosPage {
-  data: [Photo]
-  links: PaginationLinks
-  meta: PageMetadata
-}
-
-type Post {
-  id: ID
-  title: String
-  body: String
-  user: User
-  comments(options: PageQueryOptions): CommentsPage
-}
-
-type PostsPage {
-  data: [Post]
-  links: PaginationLinks
-  meta: PageMetadata
+  createUser(input: CreateUserInput!): User!
+  updateUser(id: ID!, input: UpdateUserInput!): User!
+  deleteUser(id: ID!): ID!
+  _createSnapshot(key: String!): Boolean!
 }
 
 type Query {
-  _: Int
-  albums(options: PageQueryOptions): AlbumsPage
-  album(id: ID!): Album
-  comments(options: PageQueryOptions): CommentsPage
-  comment(id: ID!): Comment
-  photos(options: PageQueryOptions): PhotosPage
-  photo(id: ID!): Photo
-  posts(options: PageQueryOptions): PostsPage
-  post(id: ID!): Post
-  todos(options: PageQueryOptions): TodosPage
-  todo(id: ID!): Todo
-  users(options: PageQueryOptions): UsersPage
+  users(page: Int, limit: Int, sort: String, dir: String, where: UsersWhere, ref: String): [User]
   user(id: ID!): User
-}
-
-input SearchOptions {
-  q: String
-}
-
-input SliceOptions {
-  start: Int
-  end: Int
-  limit: Int
-}
-
-input SortOptions {
-  field: String
-  order: SortOrderEnum
-}
-
-enum SortOrderEnum {
-  ASC
-  DESC
-}
-
-type Todo {
-  id: ID
-  title: String
-  completed: Boolean
-  user: User
-}
-
-type TodosPage {
-  data: [Todo]
-  links: PaginationLinks
-  meta: PageMetadata
-}
-
-input UpdateAlbumInput {
-  title: String
-  userId: ID
-}
-
-input UpdateCommentInput {
-  name: String
-  email: String
-  body: String
-}
-
-input UpdatePhotoInput {
-  title: String
-  url: String
-  thumbnailUrl: String
-}
-
-input UpdatePostInput {
-  title: String
-  body: String
-}
-
-input UpdateTodoInput {
-  title: String
-  completed: Boolean
+  _typeDefs: String!
+  _entities(representations: [_Any!]!): [_Entity]!
+  _service: _Service!
+  _aggregation(type: String, field: String, stat: String!, ref: String): Float!
 }
 
 input UpdateUserInput {
   name: String
-  username: String
-  email: String
-  address: AddressInput
-  phone: String
-  website: String
-  company: CompanyInput
+  dob: String
+  address: String
+  description: String
 }
 
 type User {
-  id: ID
-  name: String
-  username: String
-  email: String
-  address: Address
-  phone: String
-  website: String
-  company: Company
-  posts(options: PageQueryOptions): PostsPage
-  albums(options: PageQueryOptions): AlbumsPage
-  todos(options: PageQueryOptions): TodosPage
+  id: ID!
+  _nest: User!
+  _int(min: Int, max: Int): Int!
+  _float(min: Float, max: Float, fixed: Int): Float!
+  _boolean: Boolean!
+  _string(type: String, locale: String, template: String, length: Int, syllables: Int, casing: String, min: Int, max: Int, pool: String, sentences: Int, words: Int, nationality: String, full: Boolean): String!
+  name(length: Int): String!
+  dob(length: Int): String!
+  address(length: Int): String!
+  description(length: Int): String!
 }
 
-type UsersPage {
-  data: [User]
-  links: PaginationLinks
-  meta: PageMetadata
+input UsersWhere {
+  and: [UsersWhere!]
+  or: [UsersWhere!]
+  not: [UsersWhere!]
+  id_gt: Float
+  id_ge: Float
+  id_lt: Float
+  id_le: Float
+  id_eq: Float
+  id_neq: Float
+  id_in: [ID!]
+  id_nin: [ID!]
+  name_contains: String
+  name_startswith: String
+  name_endswith: String
+  name_eq: String
+  name_neq: String
+  name_in: [String!]
+  name_nin: [String!]
+  name_exists: Boolean
+  dob_contains: String
+  dob_startswith: String
+  dob_endswith: String
+  dob_eq: String
+  dob_neq: String
+  dob_in: [String!]
+  dob_nin: [String!]
+  dob_exists: Boolean
+  address_contains: String
+  address_startswith: String
+  address_endswith: String
+  address_eq: String
+  address_neq: String
+  address_in: [String!]
+  address_nin: [String!]
+  address_exists: Boolean
+  description_contains: String
+  description_startswith: String
+  description_endswith: String
+  description_eq: String
+  description_neq: String
+  description_in: [String!]
+  description_nin: [String!]
+  description_exists: Boolean
+  search: String
+  like: String
 }
 

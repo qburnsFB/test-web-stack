@@ -6,6 +6,8 @@ export const PencilIcon = () => {
       height="19"
       fill="none"
       viewBox="0 0 19 19"
+      focusable="false"
+      tabIndex={-1}
     >
       <path
         fill="#000"

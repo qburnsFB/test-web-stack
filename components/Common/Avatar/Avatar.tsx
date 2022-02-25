@@ -1,4 +1,5 @@
 import { forwardRef } from "react";
+import { Interpolation, Theme } from "@emotion/react";
 import styled from "@emotion/styled";
 
 type AvatarProps = {
@@ -6,31 +7,39 @@ type AvatarProps = {
   alt: string;
   width?: string;
   height?: string;
+  css?: Interpolation<Theme>;
   as?: keyof JSX.IntrinsicElements;
 };
 
 export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
-  ({ src, alt, as, width = "168px", height = "168px", ...rest }: AvatarProps, ref): JSX.Element => {
+  (
+    { src, alt, as, width = "168px", height = "168px", ...rest }: AvatarProps,
+    ref
+  ): JSX.Element => {
     const StyledAvatar = styled.div`
       border-radius: 50%;
-      height: ${height};
-      width: ${width};
-      background: transparent;
       overflow: hidden;
-      display: block;
+      width: ${width};
+      height: ${height};
+      display: inline-block;
+      background: #ccc;
     `;
 
     const StyledImg = styled.img`
-      object-fit: cover;
-      height: 100%;
-      width: 100%;
       border-radius: 50%;
+      width:100%;
+      height:100%;
+      display:block;
     `;
 
     return (
-      <StyledAvatar as={as} ref={ref} {...rest}>
-        <StyledImg src={src} />
-      </StyledAvatar>
+        <div css={{
+          height: height,
+          width: width,
+        }}>
+      <StyledAvatar className="Avatar" as={as} ref={ref} {...rest}>
+        <StyledImg src={src} alt={alt} />
+      </StyledAvatar></div>
     );
   }
 );

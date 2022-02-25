@@ -8,9 +8,9 @@
     ],
     "baseUrl": "./",
     "paths": {
-      "@components/*": ["components/*"],
-      "@lib/*": ["lib/*"],
-      "@gql/*": ["lib/gql/*"]
+      "@components/*": ["./components/*"],
+      "@lib/*": ["./lib/*"],
+      "@gql/*": ["./lib/gql/*"]
     },
     "allowJs": true,
     "skipLibCheck": true,
