@@ -57,25 +57,27 @@ export const UsersList = (): JSX.Element => {
       pageToUse = urlPage === 1 ? 2 : urlPage + 1;
     }
 
-    // Set ref index so we can use it after to properly focus on the latest user to appear
-    // Mostly for accessibility / keyboard navigation
-    firstNewUserIndex.current = usersToUse?.length;
 
     const { data } = await client
       .query(GetUsersDocument, { page: pageToUse, limit: limitToUse })
       .toPromise();
 
-    // Set users and show out of users response if required
     if (data?.users?.length) {
+
+      // Set ref index so we can use it after to properly focus on the latest user to appear
+      // Mostly for accessibility / keyboard navigation
+      firstNewUserIndex.current = data.users.length - cardLimit || usersToUse?.length;
+
+      // Set users and show out of users response if required
       // @ts-ignore
       setUsers((prevUsers) => [...prevUsers, ...data.users]);
-      const lengthIfOut = initialLoad ? urlPage * cardLimit : cardLimit;
-      if (data.users.length < lengthIfOut) {
+      const lessThanExpected = initialLoad ? urlPage * cardLimit : cardLimit;
+      if (data.users.length < lessThanExpected) {
         setOutOfUsers(true);
       }
     }
 
-    // Update url so we can refresh and get back to the same
+    // Update url so we can refresh and get back to the same spot
     if (!initialLoad) {
       const pageToSet = pageToUse;
       window.history.replaceState("", "", `/?page=${pageToSet.toString()}`);
@@ -87,11 +89,16 @@ export const UsersList = (): JSX.Element => {
   const renderUsers = () => {
     return usersToUse?.map((user: User, i: number) => {
       const isFirstNewResult = i === firstNewUserIndex.current;
+
+      // As mentioned above in fetch method, set focus on the newest result so a11y works as expected.
+      // Skips for first page so we can maintain focus on search on load
+
+      const giveFocusRef = isFirstNewResult && usersToUse.length > cardLimit ? focusRef : undefined;
       return (
         <UserCard
           key={user.id}
           user={user}
-          ref={isFirstNewResult ? focusRef : undefined}
+          ref={giveFocusRef}
         />
       );
     });
@@ -107,7 +114,6 @@ export const UsersList = (): JSX.Element => {
           gridTemplateColumns: "repeat(3, 440px)",
           gridGap: "4rem",
           justifyContent: "center",
-          overflow: "hidden",
           overflow: "hidden",
           padding: "2rem 0",
         }}

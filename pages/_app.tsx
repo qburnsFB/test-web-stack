@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { createClient, Client, Provider as UrqlProvider } from "urql";
 import { ThemeProvider, Global } from "@emotion/react";
 import { theme, global } from "@lib/theme";
-import { ModalComponent, Layout } from "@components/Common";
+import { Layout } from "@components/Common";
 import { urqlClient } from '@lib/gql';
 
 function SFApp({ Component, pageProps }: AppProps) {

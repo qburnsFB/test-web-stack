@@ -32,7 +32,7 @@ export const global = css`
   h3,
   h4,
   h5 {
-    font-family: ${theme.fonts.default};
+    font-family: ${theme.fonts.body};
     font-size: ${theme.fontSizes.default};
   }
 
