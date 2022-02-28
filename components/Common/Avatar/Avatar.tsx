@@ -1,15 +1,15 @@
-import { forwardRef } from "react";
+import { forwardRef, HTMLAttributes } from "react";
 import { Interpolation, Theme } from "@emotion/react";
 import styled from "@emotion/styled";
 
-type AvatarProps = {
+interface AvatarProps extends HTMLAttributes<HTMLDivElement> {
   src: string;
   alt: string;
   width?: string;
   height?: string;
   css?: Interpolation<Theme>;
   as?: keyof JSX.IntrinsicElements;
-};
+}
 
 export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
   (
@@ -27,19 +27,22 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
 
     const StyledImg = styled.img`
       border-radius: 50%;
-      width:100%;
-      height:100%;
-      display:block;
+      width: 100%;
+      height: 100%;
+      display: block;
     `;
 
     return (
-        <div css={{
+      <div
+        css={{
           height: height,
           width: width,
-        }}>
-      <StyledAvatar className="Avatar" as={as} ref={ref} {...rest}>
-        <StyledImg src={src} alt={alt} />
-      </StyledAvatar></div>
+        }}
+      >
+        <StyledAvatar className="Avatar" as={as} ref={ref} {...rest}>
+          <StyledImg src={src} alt={alt} />
+        </StyledAvatar>
+      </div>
     );
   }
 );

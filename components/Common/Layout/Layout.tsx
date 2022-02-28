@@ -1,7 +1,3 @@
-import { css } from "@emotion/react";
-import { useEffect, useContext } from "react";
-import { ModalContext, ModalType } from "@lib/hooks";
-
 type LayoutType = {
   children?: JSX.Element | undefined;
 }

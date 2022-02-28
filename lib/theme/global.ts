@@ -90,6 +90,11 @@ export const global = css`
     font-weight: 300;
   }
 
+  input[type="search"]::-webkit-search-cancel-button {
+    position: relative;
+    right: 10px;
+  }
+
   button {
     background: transparent;
     border: 0;

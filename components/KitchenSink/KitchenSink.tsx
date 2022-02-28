@@ -1,9 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useContext } from "react";
-import { Button, Heading, Avatar, Modal } from "@components/Common";
+import { Avatar, Button, Heading, Modal } from "@components/Common";
 import { UserCard } from "@components/Home/UserCard";
-import { useState } from "react";
 import { useModal } from "@lib/hooks/useModal";
 
 const blockStyle = {
@@ -17,6 +15,9 @@ const blockStyle = {
 export const KitchenSink: NextPage = () => {
   // @ts-ignore
   const { visible, handleToggleModal } = useModal();
+  // @ts-ignore
+  // @ts-ignore
+  // @ts-ignore
   return (
     <>
       <Head>
@@ -101,10 +102,13 @@ export const KitchenSink: NextPage = () => {
             src="https://source.unsplash.com/random/200x200/?person"
             alt="Random Person"
           />
+
           <UserCard
             css={{
               marginTop: "2rem",
             }}
+            /*
+              // @ts-ignore */
             user={{
               id: "1",
               name: "Tim Jones",

@@ -1,40 +1,38 @@
-import { useEffect, useState, forwardRef, useRef } from "react";
+import { forwardRef, HTMLAttributes, KeyboardEvent, useEffect } from "react";
 import styled from "@emotion/styled";
-import { Interpolation, Theme } from "@emotion/react";
-import { motion } from "framer-motion";
+import { motion, MotionProps } from "framer-motion";
 import { PencilIcon } from "./PencilIcon";
 import { CreatedAt } from "./CreatedAt";
 import { UserName } from "./UserName";
 import { User } from "@lib/gql/generated";
-import { Modal, Avatar, Heading, Button } from "@components/Common";
-import { useModal, useKeyPress } from "@lib/hooks";
-import { UserDescription } from "./UserDescription";
-import mapboxgl from "mapbox-gl";
+import { Avatar } from "@components/Common";
+import { UserDescription } from "@components/Home/UserCard/UserDescription";
+import { UserModal } from "@components/Home/UserCard/UserModal";
+import { useModal } from "@lib/hooks";
 
-mapboxgl.accessToken =
-  "pk.eyJ1IjoicWJ1cm5zIiwiYSI6ImNsMDI5YWtjMzBiNTczY21qa2ZiOXBhOTQifQ.jPgxv9MolX-JhEbc-y3okQ";
-
-// todo: need to make this map available in an accessible way, maybe by checking if its visible and only setting the ref then?
-// todo: need to handle no search results
-export type UserCardType = {
+export interface UserCardType extends HTMLAttributes<HTMLUListElement> {
   user: User;
-  ref?: ForwardedRef<HTMLButtonElement>;
-};
+}
 
 export const UserCard = forwardRef(
-  ({ user, ...rest }: UserCardType, ref): JSX.Element => {
+  ({ user, ...rest }: UserCardType & MotionProps, ref: any): JSX.Element => {
+    const { description, id, name } = user;
     const { visible, handleToggleModal } = useModal();
-    const [fakeSaving, setFakeSaving] = useState(false);
-    const handleFakeSaving = () => {
-        setFakeSaving(true);
-        setTimeout(() => {
-            setFakeSaving(false);
-            handleToggleModal();
-        }, 750);
-    };
-    const mapRef = useRef(null);
 
-    const StyledUserCard = styled("button")`
+    // We assign a ref to the first new user that has loaded in, so we can focus it and continue
+    // using our tab/keyboard navigation for a11y instead of it jumping to the button
+    useEffect(() => {
+      if (ref?.current) {
+        ref.current.focus({ preventScroll: true });
+      }
+    }, [ref?.current]);
+
+    const handleKeyPress = (e: KeyboardEvent<HTMLUListElement>) =>
+      e.code === "Space" || e.code === "Enter"
+        ? handleToggleModal()
+        : undefined;
+
+    const StyledUserCard = styled(motion("li"))`
       height: 336px;
       width: 400px;
       overflow: hidden;
@@ -43,7 +41,7 @@ export const UserCard = forwardRef(
       display: inline-block;
       position: relative;
       padding: 2.75rem 0 2.5rem;
-      border-radius: 8px;
+      border-radius: 0.5rem;
       transition: filter 100ms;
 
       svg,
@@ -74,23 +72,22 @@ export const UserCard = forwardRef(
 
     const cardVariants = {
       initial: { scale: 1, transition: { duration: 0.1 } },
-      tap: { scale: 1.05, transition: { duration: 0.15 } },
+      tap: { scale: 0.9, transition: { duration: 0.15 } },
     };
 
     return (
       <>
         <StyledUserCard
           className="UserCard"
-          role="button"
-          id={`${user.id}-${user.name}-Card`}
-          {...rest}
+          tabIndex={0}
           variants={cardVariants}
           initial="initial"
           whileTap="tap"
-          tabIndex={0}
-          onKeyPress={handleToggleModal}
+          onKeyPress={handleKeyPress}
           onClick={handleToggleModal}
           ref={ref}
+          data-testid="UserCard"
+          {...rest}
         >
           <figure
             css={{
@@ -100,8 +97,8 @@ export const UserCard = forwardRef(
             }}
           >
             <Avatar
-              src={`https://source.unsplash.com/random/168x168/?person,${user?.id}`}
-              alt={`Photo of ${user.name}`}
+              src={`https://source.unsplash.com/random/168x168/?person,${id}`}
+              alt={`Photo of ${name}`}
               css={{
                 display: "inline-block",
               }}
@@ -117,62 +114,20 @@ export const UserCard = forwardRef(
                 display: "flex",
               }}
             >
-              <UserName name={user?.name} />
+              <UserName name={user.name} />
               <CreatedAt />
             </div>
-            <UserDescription description={user.description} />
+            <UserDescription description={description} />
           </main>
           <StyledPencilContainer>
             <PencilIcon />
           </StyledPencilContainer>
         </StyledUserCard>
-        <Modal toggleModal={handleToggleModal} visible={visible}>
-          <div>
-            <Heading
-              size="larger"
-              css={{
-                margin: 0,
-              }}
-            >
-              Edit User
-            </Heading>
-            <div
-              css={{
-                display: "grid",
-                gridTemplateColumns: "518px auto",
-              }}
-            >
-              <figure ref={mapRef}>test</figure>
-
-              <div
-                css={{
-                  input: {
-                    marginBottom: "2rem",
-                    width: "100%",
-                  },
-                }}
-              >
-                <label htmlFor="name">Name</label>
-                <input name="name" defaultValue={user.name} />
-                <label htmlFor="address">Address</label>
-                <input name="address" defaultValue={user.address} />
-                <label htmlFor="description">Description</label>
-                <input name="description" defaultValue={user.description} />
-
-
-                  <div
-                      css={{
-                          display: "flex",
-                          justifyContent: "space-between"
-                      }}
-                  >
-                      <Button loading={fakeSaving} onClick={handleFakeSaving}>SAVE</Button>
-                      <Button variant="secondary" onClick={handleToggleModal}>CANCEL</Button>
-              </div>
-            </div>
-          </div>
-          </div>
-        </Modal>
+        <UserModal
+          user={user}
+          visible={visible}
+          handleToggleModal={handleToggleModal}
+        />
       </>
     );
   }

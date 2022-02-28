@@ -1,10 +1,7 @@
 import { css } from "@emotion/react";
-import { useEffect, useContext } from "react";
+import { HTMLAttributes, useEffect, useState } from "react";
 import { useKeyPress } from "@lib/hooks";
-import FocusLock from 'react-focus-lock';
-import {
-  useState
-} from "react";
+import FocusLock from "react-focus-lock";
 
 const backdropStyles = css({
   backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -29,6 +26,8 @@ const modalStyles = css({
   transform: "translateX(-50%)",
   position: "fixed",
   maxHeight: "calc(100vh - 100px)",
+  maxWidth: "1330px",
+  overflow: "hidden",
   borderRadius: "0.5rem",
   padding: "4rem",
   outline: "0",
@@ -40,13 +39,13 @@ const modalStyles = css({
 
 const modalVisibleStyles = css({
   opacity: "1",
-  top: "30%",
+  top: "15%",
   left: "50%",
   width: "80%",
   zIndex: "5000",
 });
 
-type ModalType = {
+interface ModalType extends HTMLAttributes<HTMLDivElement> {
   toggleModal: () => void;
   visible: boolean;
   closable?: boolean;
@@ -55,13 +54,19 @@ type ModalType = {
 
 export const Modal = ({
   children,
-    visible = false,
-    toggleModal,
+  visible = false,
+  toggleModal,
   closable = true,
   ...rest
 }: ModalType): JSX.Element => {
   // Handle escape button closing the modal
   const escapePressed: boolean = useKeyPress("Escape");
+  const [hasMounted, setHasMounted] = useState(false);
+
+  // This is done so we can add the animation styles **just** after mounting and still transition
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
   useEffect(() => {
     if (closable && escapePressed && visible) {
       return toggleModal();
@@ -71,18 +76,16 @@ export const Modal = ({
   return (
     <>
       <div
-          aria-labelledby="Edit User Dialog"
-        role="dialog"
-        css={[backdropStyles, visible && backdropVisibleStyles]}
+        css={[backdropStyles, hasMounted && backdropVisibleStyles]}
         onClick={closable ? toggleModal : undefined}
       />
       <div
         className="Modal"
-        css={[modalStyles, visible && modalVisibleStyles]}
+        aria-labelledby="Edit User Dialog"
+        role="dialog"
+        css={[modalStyles, hasMounted && modalVisibleStyles]}
       >
-        {visible && <FocusLock>
-          {children}
-        </FocusLock>}
+        <FocusLock>{children}</FocusLock>
       </div>
     </>
   );

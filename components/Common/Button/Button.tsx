@@ -1,23 +1,21 @@
-import { forwardRef, MouseEventHandler } from "react";
-import styled  from "@emotion/styled";
+import { ButtonHTMLAttributes, forwardRef } from "react";
+import styled from "@emotion/styled";
 import { motion } from "framer-motion";
-import { Loader } from '@components/Common';
-import { useTheme, css, Interpolation, Theme,  } from "@emotion/react";
+import { Loader } from "@components/Common";
+import { css, useTheme } from "@emotion/react";
 
-type ButtonProps = {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: string;
   onClick?: any | undefined;
   disabled?: boolean;
   loading?: boolean;
-  as?: keyof JSX.IntrinsicElements;
-  css?: Interpolation<Theme>;
   children: JSX.Element | string;
   className?: string;
-};
+}
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { variant, disabled, loading, onClick, as, children, ...rest }: ButtonProps,
+    { variant, disabled, loading, onClick, children, ...rest }: ButtonProps,
     ref
   ): JSX.Element => {
     const theme = useTheme();
@@ -25,7 +23,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const buttonVariants = {
       initial: { scale: 1, transition: { duration: 0.25 } },
       hover: { scale: 1.05, transition: { duration: 0.25 } },
-      tap: { scale: 1.1, transition: { duration: 0.15 } },
+      tap: { scale: 0.9, transition: { duration: 0.15 } },
     };
 
     const loadingStyle = css`
@@ -46,7 +44,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       display: inline-block;
       min-width: 280px;
       height: 90px;
-      border-radius: 8px;
+      border-radius: 0.5rem;
       color: #000;
       font-size: ${theme.fontSizes.large};
       padding: 0.65rem 1.5rem;
@@ -89,8 +87,20 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         whileHover="hover"
         whileTap="tap"
       >
-        <StyledButton className="Button" disabled={disabled} onClick={onClick} as={as} ref={ref} {...rest}>
-          {loading ? <div><Loader /></div> : children}
+        <StyledButton
+          className="Button"
+          disabled={disabled}
+          onClick={onClick}
+          ref={ref}
+          {...rest}
+        >
+          {loading ? (
+            <div>
+              <Loader />
+            </div>
+          ) : (
+            children
+          )}
         </StyledButton>
       </motion.div>
     );

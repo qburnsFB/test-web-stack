@@ -1,14 +1,14 @@
-import { forwardRef } from "react";
+import { forwardRef, HTMLAttributes } from "react";
 import styled from "@emotion/styled";
 import { Interpolation, Theme, useTheme } from "@emotion/react";
 
-type HeadingProps = {
+interface HeadingProps extends HTMLAttributes<HTMLDivElement> {
   size?: string;
   as?: keyof JSX.IntrinsicElements;
   css?: Interpolation<Theme>;
   className?: string;
   children: JSX.Element | string;
-};
+}
 
 export const Heading = forwardRef<HTMLDivElement, HeadingProps>(
   (
@@ -31,7 +31,13 @@ export const Heading = forwardRef<HTMLDivElement, HeadingProps>(
       ${() => size === "large" && h2SizeStyle}
     `;
     return (
-      <StyledHeading className="Heading" size={size} as={as} ref={ref} {...rest}>
+      <StyledHeading
+        className="Heading"
+        size={size}
+        as={as}
+        ref={ref}
+        {...rest}
+      >
         {children}
       </StyledHeading>
     );

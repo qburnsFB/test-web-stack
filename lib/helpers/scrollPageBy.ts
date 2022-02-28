@@ -1,7 +1,7 @@
 type scrollPageType = {
     amount: number;
 };
-export const scrollPageBy = (amount = 100): scrollPageType => {
+export const scrollPageBy = (amount:number = 100): void => {
         return window.scrollTo({
             top: window.pageYOffset + amount,
             behavior: 'smooth'

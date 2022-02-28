@@ -1,0 +1,6 @@
+{
+  "component": {
+    "testFiles": "{./pages/**/*.spec.*,./components/**/*.spec.*}",
+    "componentFolder": "./"
+  }
+}
